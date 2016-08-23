@@ -1,11 +1,13 @@
-FROM mhart/alpine-node:6.2.1
+FROM mhart/alpine-node:6.4.0
 
 # add project to build
 COPY . /root/server/
 WORKDIR /root/server
 
-RUN npm install -g
+RUN npm install
 
-EXPOSE 8000
+ENV PORT 4242
 
-CMD ["pushserver", "-c", "config.json"]
+EXPOSE 4242
+
+CMD ["node", "bin/pushserver", "-c", "./config.json"]
