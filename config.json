@@ -1,5 +1,5 @@
 {
-    "webPort": "process.env.PATH",
+    "webPort": "process.env.PORT",
     "path": "process.env.PATH",
     "publicKey": "process.env.PUBLIC_KEY",
 
