@@ -28,6 +28,6 @@
         "clientID": "process.env.GITHUB_CLIENTID",
         "clientSecret": "process.env.GITHUB_CLIENT_SECRET",
         "callbackURL": "process.env.GITHUB_CALLBACK_URL",
-        "allowedTeam": [2103085]
+        "allowedTeam": 2103085
     }
 }
