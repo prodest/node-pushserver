@@ -1,0 +1,7 @@
+{
+  "globalDependencies": {
+    "express-session": "registry:dt/express-session#0.0.0+20160819134112",
+    "jwt-simple": "registry:dt/jwt-simple#0.5.0+20160401095215",
+    "request-promise": "registry:dt/request-promise#3.0.0+20160811111312"
+  }
+}
