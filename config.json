@@ -1,6 +1,6 @@
 {
     "webPort": "process.env.PORT",
-    "path": "process.env.PATH",
+    "path": "process.env.REQUEST_PATH",
     "publicKey": "process.env.PUBLIC_KEY",
 
     "mongodbUrl": "process.env.MONGODB_URL",
