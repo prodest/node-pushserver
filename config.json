@@ -1,10 +1,12 @@
 {
-    "webPort": 8000,
+    "webPort": "process.env.PATH",
+    "path": "process.env.PATH",
+    "publicKey": "process.env.PUBLIC_KEY",
 
-    "mongodbUrl": "mongodb://mongo/mydb",
+    "mongodbUrl": "process.env.MONGODB_URL",
 
     "gcm": {
-        "apiKey": "YOUR_API_KEY_HERE"
+        "apiKey": "process.env.GCM_API_KEY"
     },
 
     "apn": {
@@ -20,5 +22,12 @@
             "interval": 43200,
             "batchFeedback": true
         }
+    },
+
+    "github": {
+        "clientID": "process.env.GITHUB_CLIENTID",
+        "clientSecret": "process.env.GITHUB_CLIENT_SECRET",
+        "callbackURL": "process.env.GITHUB_CALLBACK_URL",
+        "allowedTeam": [2103085]
     }
 }
