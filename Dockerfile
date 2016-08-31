@@ -1,4 +1,4 @@
-FROM node:6.4.0
+FROM mhart/alpine-node:6.4.0
 
 # add project to build
 COPY . /root/server/
