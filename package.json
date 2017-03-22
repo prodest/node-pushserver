@@ -13,6 +13,7 @@
     "basic-auth": "^1.1.0",
     "commander": "2.7.1",
     "cors": "^2.8.1",
+    "dotenv": "^4.0.0",
     "ejs": "^2.5.1",
     "express": "~3.2.6",
     "express-session": "^1.14.0",

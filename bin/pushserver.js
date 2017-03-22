@@ -7,6 +7,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
+let dotenv = require('dotenv').config();
+
 var config = require('../lib/Config'),
     web = require('../lib/Web'),
     pack = require('../package'),
@@ -14,7 +16,6 @@ var config = require('../lib/Config'),
     fs = require('fs'),
     path = require('path'),
     _ = require('lodash');
-
 
 function collect(val, memo) {
     var m = /^[^=]+=[^=]+$/.exec(val);
@@ -32,6 +33,7 @@ program.version(pack.version)
     .parse(process.argv);
 
 var configPath = program.config;
+
 if (configPath) {
     configPath = configPath.indexOf('/') === 0 ? configPath : path.join(process.cwd(), configPath);
     if (!fs.existsSync(configPath)) {
