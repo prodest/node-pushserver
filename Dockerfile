@@ -1,16 +1,14 @@
-FROM mhart/alpine-node:6.4.0
-
-RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh
+FROM node:8.9-slim
 
 # add project to build
-COPY . /root/server/
-WORKDIR /root/server
-
-RUN npm install
+COPY . /root/app
+WORKDIR /root/app
+RUN npm install && \
+    npm run build
 
 ENV PORT 4242
+ENV NODE_ENV production
 
 EXPOSE 4242
 
-CMD ["node", "bin/pushserver", "-c", "./config.json"]
+CMD [ "npm", "start" ]
