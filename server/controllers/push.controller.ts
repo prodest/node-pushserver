@@ -32,6 +32,14 @@ export class PushController {
     res.status(notificationsValid ? 200 : 400).send();
   }
 
+  public sendAndroidIos(req: Request, res: Response) {
+    const pushData = [ this.createPushObject( req.body ) ];
+
+    const notificationsValid = this.pushService.sendNotifications( pushData );
+
+    res.status( notificationsValid ? 200 : 400 ).send();
+  }
+
   public subscribe(req: any, res: Response) {
     const association = {
       sub: req.user.sub || null,
@@ -39,6 +47,7 @@ export class PushController {
       token: req.body.token,
       user: req.body.user
     };
+
     return this.repository.update(association);
   }
 
@@ -51,4 +60,43 @@ export class PushController {
   public delete(req: Request, res: Response) {
     return this.repository.removeUser(req.params.user);
   }
+
+  private createPushObject( body: any ) {
+    let { users, title, message, state, stateParams, icon } = body;
+    
+    if ( !icon ) {
+        icon = 'notification';
+    }
+
+    return {
+        users: users,
+        android: {
+            collapseKey: 'optional',
+            data: {
+                icon: icon,
+                message: message,
+                appData: {
+                    state: state,
+                    params: stateParams
+                }
+            }
+        },
+        ios: {
+            notification: {
+                badge: 0,
+                title: title,
+                body: message,
+                sound: 'default',
+                icon: icon
+            },
+            data: {
+                appData: {
+                    state: state,
+                    params: stateParams
+                }
+            },
+            priority: 'high'
+        }
+    };
+}
 }

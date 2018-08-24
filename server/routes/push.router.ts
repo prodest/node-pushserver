@@ -26,6 +26,7 @@ export class PushRouter {
         this.router.post('/subscribe', Auth.middleware, (req: Request, res: Response, next: NextFunction) => this.respond(this.controller.subscribe(req, res), res, next));
         this.router.post('/unsubscribe', (req: Request, res: Response) => this.controller.unsubscribe(req, res));
         this.router.post('/send', AuthenticationService.basicAuthentication, (req: Request, res: Response) => this.controller.send(req, res));
+        this.router.post('/send-android-ios', AuthenticationService.basicAuthentication, (req: Request, res: Response) => this.controller.sendAndroidIos(req, res));
 
         // Utils API
         this.router.get('/users/:userId/associations', AuthenticationService.basicAuthentication, (req: Request, res: Response, next: NextFunction) => this.respond(this.controller.getUserAssociations(req, res), res, next));
