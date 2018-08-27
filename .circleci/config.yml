@@ -37,10 +37,9 @@ jobs:
       - run:
           name: Docker build and push
           command: |
-              export DOCKER_IMAGE=${CIRCLE_SHA1:0:7}
-              docker build -t prodest/node-pushserver:$DOCKER_IMAGE .
+              docker build -t prodest/node-pushserver:$CIRCLE_TAG .
               docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD
-              docker push prodest/node-pushserver:$DOCKER_IMAGE
+              docker push prodest/node-pushserver:$CIRCLE_TAG
   publish-rancher:
     docker:
       - image: circleci/node:7.10
