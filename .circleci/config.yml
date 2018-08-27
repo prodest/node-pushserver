@@ -49,7 +49,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ./
-      - run: ./node_modules/.bin/upgrade-rancher --IMAGE prodest/push-server:$CIRCLE_TAG --SERVICE_ID 1s39
+      - run: ./node_modules/.bin/upgrade-rancher --IMAGE prodest/push-server:$CIRCLE_TAG --SERVICE_ID 1s139
 workflows:
   version: 2
   build-with-context:
