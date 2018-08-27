@@ -11,6 +11,10 @@ class AuthClass {
   private readonly algorithm = process.env.AUTH_ALGORITHM || 'RS256';
 
   middleware = [
+    (req: Request, res: Response, next: NextFunction) => {
+      console.log('authorizationHeader: ' + req.headers.authorization);
+      return next();
+    },
     jwt({
       // Dynamically provide a signing key based on the kid in the header and the singing keys provided by the JWKS endpoint.
       secret: jwksRsa.expressJwtSecret({
@@ -27,8 +31,6 @@ class AuthClass {
       credentialsRequired: false
     }),
     (req: Request, res: Response, next: NextFunction) => {
-      console.log('authorizationHeader: ' + req.headers.authorization);
-      console.log('authUserAfter: ' + req.user);
       if (req.user && !req.user.sub) {
         const error: any = new Error('App Token sendo utilizado ao invés de user token.');
         error.status = 401; // Unauthorized
