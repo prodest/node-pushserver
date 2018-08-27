@@ -42,7 +42,7 @@ export class PushController {
 
   public subscribe(req: any, res: Response) {
     const association = {
-      sub: req.user.sub || null,
+      sub: req.user ? req.user.sub : null,
       type: req.body.type,
       token: req.body.token,
       user: req.body.user
