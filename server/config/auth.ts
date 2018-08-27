@@ -27,6 +27,8 @@ class AuthClass {
       credentialsRequired: false
     }),
     (req: Request, res: Response, next: NextFunction) => {
+      console.log('authorizationHeader: ' + req.headers.authorization);
+      console.log('authUserAfter: ' + req.user);
       if (!req.user.sub) {
         const error: any = new Error('App Token sendo utilizado ao invés de user token.');
         error.status = 401; // Unauthorized
