@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.10"></a>
+## [0.5.10](https://github.com/prodest/node-pushserver/compare/v0.5.9...v0.5.10) (2018-08-27)
+
+
+### Bug Fixes
+
+* **ci:** apenas tags no build-docker ([e3302b3](https://github.com/prodest/node-pushserver/commit/e3302b3))
+* **subscribe:** undefined req.user ([23a8090](https://github.com/prodest/node-pushserver/commit/23a8090))
+
+
+
 <a name="0.5.9"></a>
 ## [0.5.9](https://github.com/prodest/node-pushserver/compare/v0.5.8...v0.5.9) (2018-08-27)
 
