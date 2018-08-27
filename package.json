@@ -20,7 +20,8 @@
     "watch:static": "watch \"npm run static\" server",
     "static": "find server -type f ! -name \"*.ts\" | sed \"s|^server/||\" | xargs \"-I{}\" cp \"server/{}\" \"dist/{}\"",
     "test": "mocha -t 64000 dist/**/*.spec.js",
-    "watch:test": "watch \"npm run test\" server/**/*.spec.ts"
+    "watch:test": "watch \"npm run test\" server/**/*.spec.ts",
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
@@ -67,6 +68,7 @@
     "@types/sequelize": "^4.0.73",
     "@types/typescript": "^2.0.0",
     "concurrently": "^3.5.0",
+    "standard-version": "^4.4.0",
     "tslint": "^5.2.0",
     "watch": "^1.0.2"
   }
