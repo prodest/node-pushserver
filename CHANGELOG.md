@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.11"></a>
+## [0.5.11](https://github.com/prodest/node-pushserver/compare/v0.5.10...v0.5.11) (2018-08-27)
+
+
+### Bug Fixes
+
+* **auth:** verificação de jwt req.user ([fd2a9d4](https://github.com/prodest/node-pushserver/commit/fd2a9d4))
+
+
+
 <a name="0.5.10"></a>
 ## [0.5.10](https://github.com/prodest/node-pushserver/compare/v0.5.9...v0.5.10) (2018-08-27)
 
