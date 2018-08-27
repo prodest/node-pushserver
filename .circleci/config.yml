@@ -59,7 +59,6 @@ workflows:
             tags:
               only: /.*/
       - build-docker:
-          context: org-global
           requires:
             - build
           filters:
