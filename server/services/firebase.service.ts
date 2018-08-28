@@ -16,9 +16,6 @@ import { pushAssociationRepository } from '../repository';
   public push(registrationTokens: string[], payload: admin.messaging.MessagingPayload, ttl: number = 2419200) {
     payload = this.parsePayload(payload);
 
-    console.log('androidPayload parsed:');
-    console.log(JSON.stringify(payload));
-
     admin
       .messaging()
       .sendToDevice(registrationTokens, payload, { priority: 'high', timeToLive: ttl })

@@ -56,6 +56,9 @@ export class PushService {
       .map(pa => pa.token);
     const apnsTokens = pushAssociations.filter(pa => pa.type.toLowerCase() === 'ios').map(pa => pa.token);
 
+    console.log('androidPayload parsed:');
+    console.log(JSON.stringify(androidPayload));
+
     if (androidPayload && fcmTokens.length > 0) {
       this.firebaseService.push(fcmTokens, androidPayload, ttl);
     }

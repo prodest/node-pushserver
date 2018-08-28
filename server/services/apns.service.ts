@@ -22,11 +22,6 @@ class APNSService {
   }
 
   public push(registrationTokens: string[], payload: any, ttl: number = 3600) {
-    // payload = this.parsePayload( payload );
-
-    console.log('iosPayload parsed:');
-    console.log(JSON.stringify(payload));
-
     let note: Notification = new apn.Notification(payload);
 
     note.expiry = Math.floor(Date.now() / 1000) + ttl;
