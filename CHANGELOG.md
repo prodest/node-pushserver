@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.14"></a>
+## [0.5.14](https://github.com/prodest/node-pushserver/compare/v0.5.13...v0.5.14) (2018-08-28)
+
+
+
 <a name="0.5.13"></a>
 ## [0.5.13](https://github.com/prodest/node-pushserver/compare/v0.5.12...v0.5.13) (2018-08-27)
 
