@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.15"></a>
+## [0.5.15](https://github.com/prodest/node-pushserver/compare/v0.5.14...v0.5.15) (2018-08-29)
+
+
+### Bug Fixes
+
+* **payload:** payload android e ios incorretos ([9c59419](https://github.com/prodest/node-pushserver/commit/9c59419))
+
+
+
 <a name="0.5.14"></a>
 ## [0.5.14](https://github.com/prodest/node-pushserver/compare/v0.5.13...v0.5.14) (2018-08-28)
 
