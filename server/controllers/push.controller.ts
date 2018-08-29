@@ -33,11 +33,11 @@ export class PushController {
   }
 
   public sendAndroidIos(req: Request, res: Response) {
-    const pushData = [ this.createPushObject( req.body ) ];
+    const pushData = [this.createPushObject(req.body)];
 
-    const notificationsValid = this.pushService.sendNotifications( pushData );
+    const notificationsValid = this.pushService.sendNotifications(pushData);
 
-    res.status( notificationsValid ? 200 : 400 ).send();
+    res.status(notificationsValid ? 200 : 400).send();
   }
 
   public subscribe(req: any, res: Response) {
@@ -61,42 +61,42 @@ export class PushController {
     return this.repository.removeUser(req.params.user);
   }
 
-  private createPushObject( body: any ) {
+  private createPushObject(body: any) {
     let { users, title, message, state, stateParams, icon } = body;
-    
-    if ( !icon ) {
-        icon = 'notification';
+
+    if (!icon) {
+      icon = 'notification';
     }
 
     return {
-        users: users,
-        android: {
-            collapseKey: 'optional',
-            data: {
-                icon: icon,
-                message: message,
-                appData: {
-                    state: state,
-                    params: stateParams
-                }
-            }
-        },
-        ios: {
-            notification: {
-                badge: 0,
-                title: title,
-                body: message,
-                sound: 'default',
-                icon: icon
-            },
-            data: {
-                appData: {
-                    state: state,
-                    params: stateParams
-                }
-            },
-            priority: 'high'
+      users: users,
+      android: {
+        data: {
+          'content-available': 1,
+          'no-cache': 1,
+          icon: icon,
+          title: title,
+          message: message,
+          appData: {
+            state: state,
+            params: stateParams
+          }
         }
+      },
+      ios: {
+        badge: 0,
+        sound: 'default',
+        alert: {
+          title: title,
+          body: message
+        },
+        data: {
+          appData: {
+            state: state,
+            params: stateParams
+          }
+        }
+      }
     };
-}
+  }
 }
