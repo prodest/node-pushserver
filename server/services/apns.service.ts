@@ -15,7 +15,7 @@ class APNSService {
         keyId: AppConfig.keyId,
         teamId: AppConfig.appleTeamId
       },
-      production: false
+      production: AppConfig.apnProduction
     };
 
     this.apnProvider = new apn.Provider(options);

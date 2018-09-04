@@ -38,6 +38,10 @@ export class AppConfig {
     return this.getEnv('APPLE_BUNDLE_ID') || 'appleBundleId';
   }
 
+  public static get apnProduction(): boolean {
+    return this.getEnv('APN_PRODUCTION') === 'true';
+  }
+
   public static get firebaseServiceAccount(): any {
     const firebaseData = this.getEnv('FIREBASE_SERVICE_ACCOUNT');
     return firebaseData
