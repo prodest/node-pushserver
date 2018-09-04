@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.16"></a>
+## [0.5.16](https://github.com/prodest/node-pushserver/compare/v0.5.15...v0.5.16) (2018-09-04)
+
+
+### Bug Fixes
+
+* **apn:** envio de push para produção sem funcionar ([3bdeb8d](https://github.com/prodest/node-pushserver/commit/3bdeb8d))
+
+
+
 <a name="0.5.15"></a>
 ## [0.5.15](https://github.com/prodest/node-pushserver/compare/v0.5.14...v0.5.15) (2018-08-29)
 
