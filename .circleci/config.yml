@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:10
     working_directory: ~/node-pushserver
     steps:
       - checkout
@@ -23,12 +23,12 @@ jobs:
             - ./
   test:
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:10
     steps:
       - run: npm run test
   build-docker:
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:10
     working_directory: ~/node-pushserver
     steps:
       - attach_workspace:
@@ -42,7 +42,7 @@ jobs:
               docker push prodest/node-pushserver:$CIRCLE_TAG
   publish-rancher:
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:10
     working_directory: ~/node-pushserver
     steps:
       - attach_workspace:
