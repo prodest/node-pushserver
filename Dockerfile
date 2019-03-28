@@ -1,4 +1,4 @@
-FROM node:8.9-slim
+FROM node:10-slim
 
 # add project to build
 COPY . /root/app
