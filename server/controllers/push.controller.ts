@@ -41,6 +41,7 @@ export class PushController {
   }
 
   public subscribe(req: any, res: Response) {
+    // TODO: setar subNovo no item que será criado. O object user da requisição já contém o valor de subNovo.
     const association = {
       sub: req.user ? req.user.sub : null,
       type: req.body.type,

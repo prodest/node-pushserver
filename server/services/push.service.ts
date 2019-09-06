@@ -1,12 +1,12 @@
 import * as _ from 'lodash';
 import { pushAssociationRepository } from '../repository';
 import { IPushAssociation } from '../models';
-import { firebaseService, apnsService } from '../services';
+// import { firebaseService } from '../services';
 
 export class PushService {
   private repository = pushAssociationRepository;
-  private firebaseService = firebaseService;
-  private apnsService = apnsService;
+  // private firebaseService = firebaseService;
+  // private apnsService = apnsService;
 
   // Helpers
   public sendNotifications(notifs: any) {
@@ -60,11 +60,11 @@ export class PushService {
     console.log(JSON.stringify(androidPayload));
 
     if (androidPayload && fcmTokens.length > 0) {
-      this.firebaseService.push(fcmTokens, androidPayload, ttl);
+      // this.firebaseService.push(fcmTokens, androidPayload, ttl);
     }
 
     if (iosPayload && apnsTokens.length > 0) {
-      this.apnsService.push(apnsTokens, iosPayload, ttl);
+      // this.apnsService.push(apnsTokens, iosPayload, ttl);
     }
   }
 

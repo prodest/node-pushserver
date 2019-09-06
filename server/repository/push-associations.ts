@@ -31,6 +31,7 @@ class PushAssociationRepository {
             type: 'String',
             required: false
           }
+          // TODO: adicionar subNovo no modelo
         });
 
         // I must ensure uniqueness accross the two properties because two users can have the same token (ex: in apn, 1 token === 1 device)
@@ -67,10 +68,13 @@ class PushAssociationRepository {
       .where('sub')
       .in(subs)
       .exec();
+
+    // TODO: condição OR para subNovo
   }
 
-  getForId(sub: number) {
-    return this.pushAssociation.find({ sub: sub });
+  getForId(sub: string) {
+    // TODO: condição OR para subNovo
+    return this.pushAssociation.find({ sub: sub }).or([{subNovo: sub}]);
   }
 
   getForUUIDs(uuids: string[] = []) {
@@ -85,6 +89,7 @@ class PushAssociationRepository {
   }
 
   removeUser(sub: string) {
+    // TODO: condição OR para subNovo
     return this.pushAssociation.remove({ sub: sub });
   }
 
