@@ -11,8 +11,8 @@ class PushAssociationRepository {
         AppConfig.mongoDBUrl,
         { useNewUrlParser: true }
       )
-      .then(db => {
-        let pushAssociationSchema = new db.Schema({
+      .then( db => {
+        let pushAssociationSchema = new db.Schema( {
           user: {
             type: 'String',
             required: true
@@ -20,7 +20,7 @@ class PushAssociationRepository {
           type: {
             type: 'String',
             required: true,
-            enum: ['ios', 'android'],
+            enum: [ 'ios', 'android' ],
             lowercase: true
           },
           token: {
@@ -30,79 +30,83 @@ class PushAssociationRepository {
           sub: {
             type: 'String',
             required: false
+          },
+          subNovo: {
+            type: 'String',
+            required: false
           }
           // TODO: adicionar subNovo no modelo
-        });
+        } );
 
         // I must ensure uniqueness accross the two properties because two users can have the same token (ex: in apn, 1 token === 1 device)
-        pushAssociationSchema.index({ user: 1, token: 1 }, { unique: true });
+        pushAssociationSchema.index( { user: 1, token: 1 }, { unique: true } );
 
-        this.pushAssociation = db.model('PushAssociation', pushAssociationSchema);
-      })
-      .catch(console.error);
+        this.pushAssociation = db.model( 'PushAssociation', pushAssociationSchema );
+      } )
+      .catch( console.error );
   }
 
-  update(association: IPushAssociation) {
+  update ( association: IPushAssociation ) {
     const query = { user: association.user };
-    return this.pushAssociation.findOneAndUpdate(query, association, { upsert: true });
+    return this.pushAssociation.findOneAndUpdate( query, association, { upsert: true } );
   }
 
-  updateTokens(fromToArray: ITokenUpdate[]) {
+  updateTokens ( fromToArray: ITokenUpdate[] ) {
     const promises: any[] = [];
-    fromToArray.forEach(tokenUpdate => {
-      promises.push(this.pushAssociation.findOneAndUpdate({ token: tokenUpdate.from }, { token: tokenUpdate.to }));
-    });
-    return Promise.all(promises);
+    fromToArray.forEach( tokenUpdate => {
+      promises.push( this.pushAssociation.findOneAndUpdate( { token: tokenUpdate.from }, { token: tokenUpdate.to } ) );
+    } );
+    return Promise.all( promises );
   }
 
-  getAll() {
+  getAll () {
     return this.pushAssociation.find().exec();
   }
 
-  getDistinctUsersById() {
-    return this.pushAssociation.distinct('sub').exec();
+  getDistinctUsersById () {
+    return this.pushAssociation.distinct( 'sub' ).exec();
   }
 
-  getForIds(subs: string[] = []) {
+  getForIds ( subs: string[] = [] ) {
     return this.pushAssociation
-      .where('sub')
-      .in(subs)
+      .where( 'sub' )
+      .in( subs )
       .exec();
 
     // TODO: condição OR para subNovo
   }
 
-  getForId(sub: string) {
+  getForId ( sub: string ) {
     // TODO: condição OR para subNovo
-    return this.pushAssociation.find({ sub: sub }).or([{subNovo: sub}]);
+    return this.pushAssociation.find( { sub: sub } );
   }
 
-  getForUUIDs(uuids: string[] = []) {
+  getForUUIDs ( uuids: string[] = [] ) {
     return this.pushAssociation
-      .where('user')
-      .in(uuids)
+      .where( 'user' )
+      .in( uuids )
       .exec();
   }
 
-  getForUUID(uuid: number) {
-    return this.pushAssociation.find({ user: uuid });
+  getForUUID ( uuid: number ) {
+    return this.pushAssociation.find( { user: uuid } );
   }
 
-  removeUser(sub: string) {
+  removeUser ( sub: string ) {
     // TODO: condição OR para subNovo
-    return this.pushAssociation.remove({ sub: sub });
+    return this.pushAssociation.remove( { sub: sub } );
   }
 
-  removeUUID(uuid: string) {
-    return this.pushAssociation.remove({ user: uuid });
+  removeUUID ( uuid: string ) {
+    return this.pushAssociation.remove( { user: uuid } );
   }
 
-  removeToken(token: string) {
-    return this.pushAssociation.remove({ token: token });
+  removeToken ( token: string ) {
+    return this.pushAssociation.remove( { token: token } );
   }
 
-  removeTokens(tokens: string[]) {
-    return this.pushAssociation.remove({ token: { $in: tokens } });
+  removeTokens ( tokens: string[] ) {
+    return this.pushAssociation.remove( { token: { $in: tokens } } );
   }
 }
 

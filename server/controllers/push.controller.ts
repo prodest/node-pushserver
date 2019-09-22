@@ -10,62 +10,63 @@ export class PushController {
     this.pushService = new PushService();
   }
 
-  public async index(req: Request, res: Response): Promise<any> {
-    return res.render('./index');
+  public async index ( req: Request, res: Response ): Promise<any> {
+    return res.render( './index' );
   }
 
-  public getUsers(req: Request, res: Response) {
-    return this.repository.getDistinctUsersById().then((ids: any[]) => ({ users: ids }));
+  public getUsers ( req: Request, res: Response ) {
+    return this.repository.getDistinctUsersById().then( ( ids: any[] ) => ( { users: ids } ) );
   }
 
-  public getFullUsers(req: Request, res: Response) {
+  public getFullUsers ( req: Request, res: Response ) {
     return this.repository.getAll();
   }
 
-  public getUserAssociations(req: Request, res: Response) {
-    return this.repository.getForId(req.params.sub).then((associations: any[]) => ({ associations: associations }));
+  public getUserAssociations ( req: Request, res: Response ) {
+    return this.repository.getForId( req.params.sub ).then( ( associations: any[] ) => ( { associations: associations } ) );
   }
 
-  public send(req: Request, res: Response) {
-    let notifs = [req.body];
-    let notificationsValid = this.pushService.sendNotifications(notifs);
-    res.status(notificationsValid ? 200 : 400).send();
+  public send ( req: Request, res: Response ) {
+    let notifs = [ req.body ];
+    let notificationsValid = this.pushService.sendNotifications( notifs );
+    res.status( notificationsValid ? 200 : 400 ).send();
   }
 
-  public sendAndroidIos(req: Request, res: Response) {
-    const pushData = [this.createPushObject(req.body)];
+  public sendAndroidIos ( req: Request, res: Response ) {
+    const pushData = [ this.createPushObject( req.body ) ];
 
-    const notificationsValid = this.pushService.sendNotifications(pushData);
+    const notificationsValid = this.pushService.sendNotifications( pushData );
 
-    res.status(notificationsValid ? 200 : 400).send();
+    res.status( notificationsValid ? 200 : 400 ).send();
   }
 
-  public subscribe(req: any, res: Response) {
+  public subscribe ( req: any, res: Response ) {
     // TODO: setar subNovo no item que será criado. O object user da requisição já contém o valor de subNovo.
     const association = {
-      sub: req.user ? req.user.sub : null,
+      sub: req.body.user ? req.body.user : null,
       type: req.body.type,
       token: req.body.token,
-      user: req.body.user
+      user: req.body.user,
+      subNovo: req.body.subNovo
     };
 
-    return this.repository.update(association);
+    return this.repository.update( association );
   }
 
-  public unsubscribe(req: any, res: Response) {
+  public unsubscribe ( req: any, res: Response ) {
     const deviceInfo = req.body;
 
-    return this.repository.removeUUID(deviceInfo.user);
+    return this.repository.removeUUID( deviceInfo.user );
   }
 
-  public delete(req: Request, res: Response) {
-    return this.repository.removeUser(req.params.user);
+  public delete ( req: Request, res: Response ) {
+    return this.repository.removeUser( req.params.user );
   }
 
-  private createPushObject(body: any) {
+  private createPushObject ( body: any ) {
     let { users, title, message, state, stateParams, icon } = body;
 
-    if (!icon) {
+    if ( !icon ) {
       icon = 'notification';
     }
 
