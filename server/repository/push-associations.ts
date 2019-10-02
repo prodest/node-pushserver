@@ -1,49 +1,53 @@
-import { IPushAssociation, ITokenUpdate } from '../models';
-import { AppConfig } from '../config';
-import * as mongoose from 'mongoose';
+import { IPushAssociation, ITokenUpdate } from "../models";
+import { AppConfig } from "../config";
+import * as mongoose from "mongoose";
 
 class PushAssociationRepository {
   pushAssociation: mongoose.Model<mongoose.Document>;
 
   constructor() {
     mongoose
-      .connect(
-        AppConfig.mongoDBUrl,
-        { useNewUrlParser: true }
-      )
+      .connect(AppConfig.mongoDBUrl, { useNewUrlParser: true })
       .then(db => {
         let pushAssociationSchema = new db.Schema({
           user: {
-            type: 'String',
+            type: "String",
             required: true
           },
           type: {
-            type: 'String',
+            type: "String",
             required: true,
-            enum: ['ios', 'android'],
+            enum: ["ios", "android"],
             lowercase: true
           },
           token: {
-            type: 'String',
+            type: "String",
             required: true
           },
           sub: {
-            type: 'String',
+            type: "String",
+            required: false
+          },
+          subNovo: {
+            type: "String",
             required: false
           }
+          // TODO: adicionar subNovo no modelo
         });
 
         // I must ensure uniqueness accross the two properties because two users can have the same token (ex: in apn, 1 token === 1 device)
         pushAssociationSchema.index({ user: 1, token: 1 }, { unique: true });
 
-        this.pushAssociation = db.model('PushAssociation', pushAssociationSchema);
+        this.pushAssociation = db.model("PushAssociation", pushAssociationSchema);
       })
       .catch(console.error);
   }
 
   update(association: IPushAssociation) {
     const query = { user: association.user };
-    return this.pushAssociation.findOneAndUpdate(query, association, { upsert: true });
+    return this.pushAssociation.findOneAndUpdate(query, association, {
+      upsert: true
+    });
   }
 
   updateTokens(fromToArray: ITokenUpdate[]) {
@@ -58,24 +62,34 @@ class PushAssociationRepository {
     return this.pushAssociation.find().exec();
   }
 
-  getDistinctUsersById() {
-    return this.pushAssociation.distinct('sub').exec();
+  getDistinctUsersBySub(filter: any) {
+    const regexFilter = new RegExp(filter, "i");
+    let a = this.pushAssociation
+      .find({ sub: regexFilter })
+      .distinct("sub")
+      .exec();
+
+    return a;
+  }
+
+  getDistinctUsersBySubNovo() {
+    return this.pushAssociation.distinct("subNovo").exec();
   }
 
   getForIds(subs: string[] = []) {
     return this.pushAssociation
-      .where('sub')
-      .in(subs)
+      .find({ $or: [{ sub: { $in: subs } }, { subNovo: { $in: subs } }] }) // Busca pelo sub ou subNovo
       .exec();
   }
 
-  getForId(sub: number) {
-    return this.pushAssociation.find({ sub: sub });
+  getForId(sub: string) {
+    // Busca pelo sub ou subNovo
+    return this.pushAssociation.find({ $or: [{ sub: sub }, { subNovo: sub }] });
   }
 
   getForUUIDs(uuids: string[] = []) {
     return this.pushAssociation
-      .where('user')
+      .where("user")
       .in(uuids)
       .exec();
   }
@@ -85,7 +99,10 @@ class PushAssociationRepository {
   }
 
   removeUser(sub: string) {
-    return this.pushAssociation.remove({ sub: sub });
+    // TODO: condição OR para subNovo
+    return this.pushAssociation.remove({
+      $or: [{ sub: sub }, { subNovo: sub }]
+    });
   }
 
   removeUUID(uuid: string) {

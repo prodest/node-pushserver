@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import { pushAssociationRepository } from '../repository';
-import { PushService } from '../services';
+import { Request, Response } from "express";
+import { pushAssociationRepository } from "../repository";
+import { PushService } from "../services";
 
 export class PushController {
   private repository = pushAssociationRepository;
@@ -11,11 +11,11 @@ export class PushController {
   }
 
   public async index(req: Request, res: Response): Promise<any> {
-    return res.render('./index');
+    return res.render("./index");
   }
 
   public getUsers(req: Request, res: Response) {
-    return this.repository.getDistinctUsersById().then((ids: any[]) => ({ users: ids }));
+    return this.repository.getDistinctUsersBySub(req.query.f).then((ids: any[]) => ({ users: ids }));
   }
 
   public getFullUsers(req: Request, res: Response) {
@@ -41,13 +41,14 @@ export class PushController {
   }
 
   public subscribe(req: any, res: Response) {
+    // TODO: setar subNovo no item que será criado. O object user da requisição já contém o valor de subNovo.
     const association = {
       sub: req.user ? req.user.sub : null,
+      subNovo: req.user ? req.user.subNovo : null,
       type: req.body.type,
       token: req.body.token,
       user: req.body.user
     };
-
     return this.repository.update(association);
   }
 
@@ -65,15 +66,15 @@ export class PushController {
     let { users, title, message, state, stateParams, icon } = body;
 
     if (!icon) {
-      icon = 'notification';
+      icon = "notification";
     }
 
     return {
       users: users,
       android: {
         data: {
-          'content-available': 1,
-          'no-cache': 1,
+          "content-available": 1,
+          "no-cache": 1,
           icon: icon,
           title: title,
           message: message,
@@ -85,7 +86,7 @@ export class PushController {
       },
       ios: {
         badge: 0,
-        sound: 'default',
+        sound: "default",
         alert: {
           title: title,
           body: message

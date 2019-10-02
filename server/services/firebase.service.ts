@@ -79,4 +79,6 @@ import { pushAssociationRepository } from '../repository';
   }
 }
 
-export const firebaseService = new FirebaseService();
+// const firebaseService = new FirebaseService();
+
+new FirebaseService();

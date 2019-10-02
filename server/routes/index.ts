@@ -10,8 +10,9 @@ export namespace main {
 
     router.use('/api/v1/ping', new PingRouter().getRouter());
     router.use('/api/v1/', express.static(__dirname + '/../../public'));
-    router.use('/api/v1', new PushRouter().getRouter());
+    router.use('/api/v1/', new PushRouter().getRouter());
     router.use('/', new PushRouter().getRouter());
+    router.use('/', express.static(__dirname + '/../../public'));
 
     app.use(AppConfig.requestPath, router);
     return app;

@@ -21,7 +21,10 @@
     "static": "find server -type f ! -name \"*.ts\" | sed \"s|^server/||\" | xargs \"-I{}\" cp \"server/{}\" \"dist/{}\"",
     "test": "mocha -t 64000 dist/**/*.spec.js",
     "watch:test": "watch \"npm run test\" server/**/*.spec.ts",
-    "release": "standard-version"
+    "release": "standard-version",
+    "mongodb": "docker run --name mongodb-srv -d -p 8081:8081 -p 27017:27017 -p 27018:27018 -p 27019:27019 mongo",
+    "mongodb:persistent": "docker run --name mongodb-srv -d -e MONGO_INITDB_DATABASE=realtime -v /DOCKER-VOLUMES/mongo:/data/db -v /DOCKER-VOLUMES/mongo/configdb:/data/configdb  -p 27017:27017 mongo",
+    "shell:mongodb": "docker exec -i -t mongodb-srv /bin/bash"
   },
   "repository": {
     "type": "git",
@@ -29,6 +32,7 @@
   },
   "bugs": "https://github.com/prodest/node-pushserver/issues",
   "dependencies": {
+    "@types/request-promise": "^4.1.44",
     "apn": "^2.2.0",
     "basic-auth": "^1.1.0",
     "body-parser": "^1.17.2",
@@ -46,6 +50,7 @@
     "morgan": "^1.8.1",
     "pg": "^7.3.0",
     "pg-hstore": "^2.3.2",
+    "request-promise": "^4.2.4",
     "sequelize": "^4.8.4",
     "thinky": "^2.3.8",
     "typescript": "^2.3.2"
