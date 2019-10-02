@@ -32,6 +32,7 @@
   },
   "bugs": "https://github.com/prodest/node-pushserver/issues",
   "dependencies": {
+    "@types/request-promise": "^4.1.44",
     "apn": "^2.2.0",
     "basic-auth": "^1.1.0",
     "body-parser": "^1.17.2",
@@ -49,6 +50,7 @@
     "morgan": "^1.8.1",
     "pg": "^7.3.0",
     "pg-hstore": "^2.3.2",
+    "request-promise": "^4.2.4",
     "sequelize": "^4.8.4",
     "thinky": "^2.3.8",
     "typescript": "^2.3.2"

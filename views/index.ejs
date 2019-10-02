@@ -1,212 +1,231 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Push</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- TODO: Concat/min all ze things -->
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/bootstrap-responsive.css">
-    <link rel="stylesheet" href="css/codemirror-3.13.css">
-    <link rel="stylesheet" href="css/elegant-3.13.css">
-    <link rel="stylesheet" href="css/select2.css"/>
-    <link rel="stylesheet" href="css/toastr-1.0.2.css"/>
-    <link rel="stylesheet" href="css/toastr-responsive-1.0.2.css"/>
-    <link rel="stylesheet" href="css/push.css">
-</head>
-<body>
-<header>
-    <nav>
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/bootstrap-responsive.css" />
+    <link rel="stylesheet" href="css/codemirror-3.13.css" />
+    <link rel="stylesheet" href="css/elegant-3.13.css" />
+    <link rel="stylesheet" href="css/select2.css" />
+    <link rel="stylesheet" href="css/toastr-1.0.2.css" />
+    <link rel="stylesheet" href="css/toastr-responsive-1.0.2.css" />
+    <link rel="stylesheet" href="css/push.css" />
+  </head>
+  <body>
+    <header>
+      <nav>
         <div class="navbar">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                    </a>
-                    <a class="brand transition" href="/">Push</a>
+          <div class="navbar-inner">
+            <div class="container">
+              <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+              </a>
+              <a class="brand transition" href="/">Push</a>
 
-                    <div class="nav-collapse">
-                        <ul class="nav">
-                            <li class="active">
-                                <a href="/" class="transition">
-                                    <i class="icon-envelope icon-white"></i> Send
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+              <div class="nav-collapse">
+                <ul class="nav">
+                  <li class="active">
+                    <a href="/" class="transition"> <i class="icon-envelope icon-white"></i> Send </a>
+                  </li>
+                </ul>
+              </div>
             </div>
+          </div>
         </div>
-    </nav>
-</header>
+      </nav>
+    </header>
 
-<div class="container">
-    <div class="row">
+    <div class="container">
+      <div class="row">
         <div class="offset2 span8">
+          <form id="pushForm" class="well form-horizontal" action="" method="POST">
+            <fieldset>
+              <legend>Recipient(s)</legend>
 
-            <form id="pushForm" class="well form-horizontal" action="" method="POST">
-                <fieldset>
-                    <legend>Recipient(s)</legend>
+              <div class="control-group">
+                <label class="control-label" for="users">Users:</label>
+                <div class="controls">
+                  <select name="users" id="users" multiple style="width: 100%"></select>
+                </div>
+              </div>
+            </fieldset>
 
-                    <div class="control-group">
-                        <label class="control-label" for="users">Users:</label>
-                        <div class="controls">
-                            <select name="users" id="users" multiple style="width: 100%"></select>
-                        </div>
-                    </div>
+            <fieldset>
+              <legend>Android</legend>
 
-                </fieldset>
+              <div class="control-group">
+                <label class="control-label" for="androidOptions">Payload: </label>
 
-                <fieldset>
-                    <legend>Android</legend>
-
-                    <div class="control-group">
-                        <label class="control-label" for="androidOptions">Payload: </label>
-
-                        <div class="controls">
-                            <textarea id="androidOptions" name="androidOptions" class="json-textarea source input-xlarge">
+                <div class="controls">
+                  <textarea id="androidOptions" name="androidOptions" class="json-textarea source input-xlarge">
 {
     "data": {
         "message": "You message here"
     }
 }
-                            </textarea>
-                        </div>
-                    </div>
+                            </textarea
+                  >
+                </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>iOS</legend>
 
-                </fieldset>
-                <fieldset>
-                    <legend>iOS</legend>
+              <div class="control-group">
+                <label class="control-label" for="iosOptions">Payload: </label>
 
-                    <div class="control-group">
-                        <label class="control-label" for="iosOptions">Payload: </label>
-
-                        <div class="controls">
-                            <textarea id="iosOptions" name="iosOptions" class="json-textarea source input-xlarge">
+                <div class="controls">
+                  <textarea id="iosOptions" name="iosOptions" class="json-textarea source input-xlarge">
 {
     "badge": 0,
     "alert": "Your message here",
     "sound": "soundName"
 }
-                            </textarea>
-                        </div>
-                    </div>
-                </fieldset>
+                            </textarea
+                  >
+                </div>
+              </div>
+            </fieldset>
 
-                <input class="btn btn-danger" style="width: 100%;" id="sendPush" type="submit" value="Send!"/>
-            </form>
+            <input class="btn btn-danger" style="width: 100%;" id="sendPush" type="submit" value="Send!" />
+          </form>
         </div>
-
+      </div>
     </div>
-</div>
 
-<!-- TODO: Concat/min all ze things -->
-<script src="lib/jquery-1.8.3.js"></script>
-<script src="lib/bootstrap.js"></script>
-<script src="lib/codemirror-3.13.js"></script>
-<script src="lib/continuecomment.js"></script>
-<script src="lib/javascript-3.13.js"></script>
-<script src="lib/select2.js"></script>
-<script src="lib/toastr-1.0.2.js"></script>
+    <!-- TODO: Concat/min all ze things -->
+    <script src="lib/jquery-1.8.3.js"></script>
+    <script src="lib/bootstrap.js"></script>
+    <script src="lib/codemirror-3.13.js"></script>
+    <script src="lib/continuecomment.js"></script>
+    <script src="lib/javascript-3.13.js"></script>
+    <script src="lib/select2.js"></script>
+    <script src="lib/toastr-1.0.2.js"></script>
 
-<script>
-    (function() {
+    <script>
+      (function() {
         // Init code mirror
-        $('.json-textarea').each(function() {
-            $(this).attr('autocapitalize', 'off')
-                    .attr('autocorrect', 'off')
-                    .attr('required', true);
+        $(".json-textarea").each(function() {
+          $(this)
+            .attr("autocapitalize", "off")
+            .attr("autocorrect", "off")
+            .attr("required", true);
 
-            var editor = CodeMirror.fromTextArea(this, {
-                lineNumbers: true,
-                matchBrackets: true,
-                extraKeys: {"Enter": "newlineAndIndentContinueComment"},
-                mode: {name: "javascript", json: true},
-                theme: 'elegant'
-            });
-            editor.setSize('100%', '150px');
-            $(this).parent().siblings('label').click(function() {
-                editor.focus();
+          var editor = CodeMirror.fromTextArea(this, {
+            lineNumbers: true,
+            matchBrackets: true,
+            extraKeys: { Enter: "newlineAndIndentContinueComment" },
+            mode: { name: "javascript", json: true },
+            theme: "elegant"
+          });
+          editor.setSize("100%", "150px");
+          $(this)
+            .parent()
+            .siblings("label")
+            .click(function() {
+              editor.focus();
             });
         });
 
         // Init select2
         $("#users").select2({
-                    tokenSeparators: [",", " "],
-                    placeholder: "(Optional, defaults to everyone)"
-                });
+          tokenSeparators: [",", " "],
+          placeholder: "(Optional, defaults to everyone)"
+        });
 
         // Init user list
-        toastr.info('Loading users...')
-        $.get('users', function(data) {
-            var users = data.users,
-                usersSelect = $('#users');
+        /*$.get("users", function(data) {
+          var users = data.users,
+            usersSelect = $("#users");
 
-            users.forEach(function(user) {
-               usersSelect.append(new Option(user));
+          users.forEach(function(user) {
+            usersSelect;
+            usersSelect.append(new Option(user));
+          });
+          toastr.success("Users loaded!");
+        });*/
+
+        // Later, you can stop observing
+        // observer.disconnect();
+
+        $("body").on("keyup", "input.select2-input", function(e) {
+          const filter = e.target.value;
+          if (filter.length > 1) {
+            toastr.info("Loading users...");
+            $.get("users?f=" + filter, function(data) {
+              var users = data.users,
+                usersSelect = $("#users");
+
+              usersSelect.empty();
+
+              users.forEach(function(user) {
+                usersSelect.append(new Option(user));
+              });
+              usersSelect.select2("close");
+              usersSelect.select2("open");
+              $(e.target).val(filter);
+
+              toastr.success("Users loaded!");
             });
-            toastr.success('Users loaded !');
+          }
         });
 
         // Bind form submit
-        $('#pushForm').submit(function (event) {
-            sendPush(formValues('#pushForm'));
-            return false;
+        $("#pushForm").submit(function(event) {
+          sendPush(formValues("#pushForm"));
+          return false;
         });
 
         function formValues(selector) {
-            return $(selector)
-                    .serializeArray()
-                    .reduce(function (prev, curr) {
-                        var curVal = curr.value.trim();
+          return $(selector)
+            .serializeArray()
+            .reduce(function(prev, curr) {
+              var curVal = curr.value.trim();
 
-                        if (prev[curr.name] === undefined) {
-                            prev[curr.name] = curVal;
-                        } else {
-                            if (typeof prev[curr.name] !== "object")
-                                prev[curr.name] = [prev[curr.name]];
+              if (prev[curr.name] === undefined) {
+                prev[curr.name] = curVal;
+              } else {
+                if (typeof prev[curr.name] !== "object") prev[curr.name] = [prev[curr.name]];
 
-                            prev[curr.name].push(curVal);
-                        }
+                prev[curr.name].push(curVal);
+              }
 
-                        return prev;
-                    }, {});
+              return prev;
+            }, {});
         }
 
         function isJSON(value) {
-            return typeof value === "string" && value.trim().indexOf("{") === 0;
+          return typeof value === "string" && value.trim().indexOf("{") === 0;
         }
 
         function sendPush(formValues) {
-            var pushNotification = {};
+          var pushNotification = {};
 
-            if(formValues.users)
-                pushNotification.users = [].concat(formValues.users);
+          if (formValues.users) pushNotification.users = [].concat(formValues.users);
 
-            if(isJSON(formValues.androidOptions))
-                pushNotification.android= JSON.parse(formValues.androidOptions);
+          if (isJSON(formValues.androidOptions)) pushNotification.android = JSON.parse(formValues.androidOptions);
 
-            if(isJSON(formValues.iosOptions))
-                pushNotification.ios= JSON.parse(formValues.iosOptions);
+          if (isJSON(formValues.iosOptions)) pushNotification.ios = JSON.parse(formValues.iosOptions);
 
-            $.ajax({
-                url: 'send',
-                type: 'POST',
-                data: JSON.stringify(pushNotification),
-                contentType: 'application/json',
-                dataType: 'json',
-                success: function(msg) {
-                    toastr.success('Push message successfully sent!');
-                },
-                error: function() {
-                    toastr.error('Failed to send push message');
-                    console.dir(arguments);
-                }
-            });
+          $.ajax({
+            url: "send",
+            type: "POST",
+            data: JSON.stringify(pushNotification),
+            contentType: "application/json",
+            dataType: "json",
+            success: function(msg) {
+              toastr.success("Push message successfully sent!");
+            },
+            error: function() {
+              toastr.error("Failed to send push message");
+              console.dir(arguments);
+            }
+          });
         }
-
-    })();
-</script>
-
-</body>
+      })();
+    </script>
+  </body>
 </html>

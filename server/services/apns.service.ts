@@ -56,4 +56,5 @@ class APNSService {
   }
 }
 
-const apnsService = new APNSService();
+// const apnsService = new APNSService();
+new APNSService();

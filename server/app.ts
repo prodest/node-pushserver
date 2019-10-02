@@ -43,19 +43,21 @@ class MainApp {
 
     // development error handler
     // will print stacktrace
-    if ( this.app.get( 'env' ) === 'development' ) {
+    const enviroment = this.app.get( 'env' );
+    if ( enviroment === 'development' ) {
       this.app.use( function ( err: any, req: Request, res: Response, next: Function ) {
         console.error( err );
         res.status( err.statusCode || 500 ).json( { error: err.message, stack: err.stack } );
       } );
+    } else if (enviroment === 'production') {
+      // production error handler
+      // no stacktraces leaked to user
+      this.app.use(( err: any, req: Request, res: Response, next: Function ) => {
+        console.error( err );
+        res.status( err.statusCode || 500 ).json( { error: err.message } );
+      } );
     }
-
-    // production error handler
-    // no stacktraces leaked to user
-    this.app.use(( err: any, req: Request, res: Response, next: Function ) => {
-      console.error( err );
-      res.status( err.statusCode || 500 ).json( { error: err.message } );
-    } );
+    
     return this.app;
   }
 }

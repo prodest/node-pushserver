@@ -1,6 +1,6 @@
-import * as _ from 'lodash';
-import { pushAssociationRepository } from '../repository';
-import { IPushAssociation } from '../models';
+import * as _ from "lodash";
+import { pushAssociationRepository } from "../repository";
+import { IPushAssociation } from "../models";
 // import { firebaseService } from '../services';
 
 export class PushService {
@@ -15,7 +15,7 @@ export class PushService {
       .min();
 
     if (!areNotificationsValid) {
-      throw 'Payload inválido';
+      throw "Payload inválido";
     }
 
     notifs.forEach((notif: any) => {
@@ -26,18 +26,23 @@ export class PushService {
       const ttl: number = notif.ttl;
 
       if (!users && !sendToAll) {
-        throw 'Nenhum usuário de destino';
+        throw "Nenhum usuário de destino";
       }
 
       if (users) {
         this.repository
           .getForIds(users)
-          .then((pushAssociations: any) => this.send(pushAssociations, androidPayload, iosPayload, ttl))
+          .then((pushAssociations: any) => {
+            console.log(pushAssociations);
+            return this.send(pushAssociations, androidPayload, iosPayload, ttl);
+          })
           .catch(console.error);
       } else {
         this.repository
           .getAll()
-          .then((pushAssociations: any) => this.send(pushAssociations, androidPayload, iosPayload, ttl))
+          .then((pushAssociations: any) =>
+            this.send(pushAssociations, androidPayload, iosPayload, ttl)
+          )
           .catch(console.error);
       }
     });
@@ -52,11 +57,16 @@ export class PushService {
     ttl: number
   ) {
     const fcmTokens = pushAssociations
-      .filter(pa => pa.type.toLowerCase() === 'android' || pa.type.toLowerCase() === 'web')
+      .filter(
+        pa =>
+          pa.type.toLowerCase() === "android" || pa.type.toLowerCase() === "web"
+      )
       .map(pa => pa.token);
-    const apnsTokens = pushAssociations.filter(pa => pa.type.toLowerCase() === 'ios').map(pa => pa.token);
+    const apnsTokens = pushAssociations
+      .filter(pa => pa.type.toLowerCase() === "ios")
+      .map(pa => pa.token);
 
-    console.log('androidPayload parsed:');
+    console.log("androidPayload parsed:");
     console.log(JSON.stringify(androidPayload));
 
     if (androidPayload && fcmTokens.length > 0) {
@@ -84,13 +94,13 @@ export class PushService {
     icon: string
   ) {
     if (!icon) {
-      icon = 'notification';
+      icon = "notification";
     }
 
     return {
       users: users,
       android: {
-        collapseKey: 'optional',
+        collapseKey: "optional",
         data: {
           icon: icon,
           message: message,
@@ -105,7 +115,7 @@ export class PushService {
           badge: 0,
           title: title,
           body: message,
-          sound: 'default',
+          sound: "default",
           icon: icon
         },
         data: {
@@ -114,7 +124,7 @@ export class PushService {
             params: stateParams
           }
         },
-        priority: 'high'
+        priority: "high"
       }
     };
   }

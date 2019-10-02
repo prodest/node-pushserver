@@ -16,8 +16,12 @@ export class PushRouter {
 
     private respond ( promise: any | Bluebird<any>, res: Response, next: NextFunction ) {
         promise
-            .then( ( data: any ) => res.json( data ) )
-            .catch( ( error: any ) => next( error ) );
+            .then( ( data: any ) => {
+                res.json( data )
+             } )
+            .catch( ( error: any ) =>{
+                next( error )
+            } );
     }
 
     public routers () {
