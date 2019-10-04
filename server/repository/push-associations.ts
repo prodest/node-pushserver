@@ -113,7 +113,6 @@ class PushAssociationRepository {
     }
 
     removeUser(sub: string) {
-        // TODO: condição OR para subNovo
         return this.pushAssociation.remove({
             $or: [{ sub: sub }, { subLegacy: sub }]
         });
