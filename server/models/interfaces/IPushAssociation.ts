@@ -4,5 +4,5 @@ export interface IPushAssociation {
     type: string;
     token: string;
     sub: string;
-    subNovo: string;
+    subLegacy: string;
 }

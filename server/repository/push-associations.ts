@@ -1,121 +1,135 @@
-import { IPushAssociation, ITokenUpdate } from "../models";
-import { AppConfig } from "../config";
-import * as mongoose from "mongoose";
+import { IPushAssociation, ITokenUpdate } from '../models';
+import { AppConfig } from '../config';
+import * as mongoose from 'mongoose';
 
 class PushAssociationRepository {
-  pushAssociation: mongoose.Model<mongoose.Document>;
+    pushAssociation: mongoose.Model<mongoose.Document>;
 
-  constructor() {
-    mongoose
-      .connect(AppConfig.mongoDBUrl, { useNewUrlParser: true })
-      .then(db => {
-        let pushAssociationSchema = new db.Schema({
-          user: {
-            type: "String",
-            required: true
-          },
-          type: {
-            type: "String",
-            required: true,
-            enum: ["ios", "android"],
-            lowercase: true
-          },
-          token: {
-            type: "String",
-            required: true
-          },
-          sub: {
-            type: "String",
-            required: false
-          },
-          subNovo: {
-            type: "String",
-            required: false
-          }
-          // TODO: adicionar subNovo no modelo
+    constructor() {
+        mongoose
+            .connect(AppConfig.mongoDBUrl, { useNewUrlParser: true })
+            .then(db => {
+                let pushAssociationSchema = new db.Schema({
+                    user: {
+                        type: 'String',
+                        required: true
+                    },
+                    type: {
+                        type: 'String',
+                        required: true,
+                        enum: ['ios', 'android'],
+                        lowercase: true
+                    },
+                    token: {
+                        type: 'String',
+                        required: true
+                    },
+                    sub: {
+                        type: 'String',
+                        required: false
+                    },
+                    subLegacy: {
+                        type: 'String',
+                        required: false
+                    }
+                });
+
+                // I must ensure uniqueness accross the two properties because two users can have the same token (ex: in apn, 1 token === 1 device)
+                pushAssociationSchema.index(
+                    { user: 1, token: 1 },
+                    { unique: true }
+                );
+
+                this.pushAssociation = db.model(
+                    'PushAssociation',
+                    pushAssociationSchema
+                );
+            })
+            .catch(console.error);
+    }
+
+    update(association: IPushAssociation) {
+        const query = { user: association.user };
+        return this.pushAssociation.findOneAndUpdate(query, association, {
+            upsert: true
         });
+    }
 
-        // I must ensure uniqueness accross the two properties because two users can have the same token (ex: in apn, 1 token === 1 device)
-        pushAssociationSchema.index({ user: 1, token: 1 }, { unique: true });
+    updateTokens(fromToArray: ITokenUpdate[]) {
+        const promises: any[] = [];
+        fromToArray.forEach(tokenUpdate => {
+            promises.push(
+                this.pushAssociation.findOneAndUpdate(
+                    { token: tokenUpdate.from },
+                    { token: tokenUpdate.to }
+                )
+            );
+        });
+        return Promise.all(promises);
+    }
 
-        this.pushAssociation = db.model("PushAssociation", pushAssociationSchema);
-      })
-      .catch(console.error);
-  }
+    getAll() {
+        return this.pushAssociation.find().exec();
+    }
 
-  update(association: IPushAssociation) {
-    const query = { user: association.user };
-    return this.pushAssociation.findOneAndUpdate(query, association, {
-      upsert: true
-    });
-  }
+    getDistinctUsersBySub(filter: any) {
+        const regexFilter = new RegExp(filter, 'i');
+        let a = this.pushAssociation
+            .find({ sub: regexFilter })
+            .distinct('sub')
+            .exec();
 
-  updateTokens(fromToArray: ITokenUpdate[]) {
-    const promises: any[] = [];
-    fromToArray.forEach(tokenUpdate => {
-      promises.push(this.pushAssociation.findOneAndUpdate({ token: tokenUpdate.from }, { token: tokenUpdate.to }));
-    });
-    return Promise.all(promises);
-  }
+        return a;
+    }
 
-  getAll() {
-    return this.pushAssociation.find().exec();
-  }
+    getDistinctUsersBySubLegacy() {
+        return this.pushAssociation.distinct('subLegacy').exec();
+    }
 
-  getDistinctUsersBySub(filter: any) {
-    const regexFilter = new RegExp(filter, "i");
-    let a = this.pushAssociation
-      .find({ sub: regexFilter })
-      .distinct("sub")
-      .exec();
+    getForIds(subs: string[] = []) {
+        return this.pushAssociation
+            .find({
+                $or: [{ sub: { $in: subs } }, { subLegacy: { $in: subs } }]
+            }) // Busca pelo sub ou subNovo
+            .exec();
+    }
 
-    return a;
-  }
+    getForId(sub: string) {
+        // Busca pelo sub ou subLegacy
+        return this.pushAssociation.find({
+            $or: [{ sub: sub }, { subLegacy: sub }]
+        });
+    }
 
-  getDistinctUsersBySubNovo() {
-    return this.pushAssociation.distinct("subNovo").exec();
-  }
+    getForUUIDs(uuids: string[] = []) {
+        return this.pushAssociation
+            .where('user')
+            .in(uuids)
+            .exec();
+    }
 
-  getForIds(subs: string[] = []) {
-    return this.pushAssociation
-      .find({ $or: [{ sub: { $in: subs } }, { subNovo: { $in: subs } }] }) // Busca pelo sub ou subNovo
-      .exec();
-  }
+    getForUUID(uuid: number) {
+        return this.pushAssociation.find({ user: uuid });
+    }
 
-  getForId(sub: string) {
-    // Busca pelo sub ou subNovo
-    return this.pushAssociation.find({ $or: [{ sub: sub }, { subNovo: sub }] });
-  }
+    removeUser(sub: string) {
+        // TODO: condição OR para subNovo
+        return this.pushAssociation.remove({
+            $or: [{ sub: sub }, { subLegacy: sub }]
+        });
+    }
 
-  getForUUIDs(uuids: string[] = []) {
-    return this.pushAssociation
-      .where("user")
-      .in(uuids)
-      .exec();
-  }
+    removeUUID(uuid: string) {
+        return this.pushAssociation.remove({ user: uuid });
+    }
 
-  getForUUID(uuid: number) {
-    return this.pushAssociation.find({ user: uuid });
-  }
+    removeToken(token: string) {
+        return this.pushAssociation.remove({ token: token });
+    }
 
-  removeUser(sub: string) {
-    // TODO: condição OR para subNovo
-    return this.pushAssociation.remove({
-      $or: [{ sub: sub }, { subNovo: sub }]
-    });
-  }
-
-  removeUUID(uuid: string) {
-    return this.pushAssociation.remove({ user: uuid });
-  }
-
-  removeToken(token: string) {
-    return this.pushAssociation.remove({ token: token });
-  }
-
-  removeTokens(tokens: string[]) {
-    return this.pushAssociation.remove({ token: { $in: tokens } });
-  }
+    removeTokens(tokens: string[]) {
+        return this.pushAssociation.remove({ token: { $in: tokens } });
+    }
 }
 
 export const pushAssociationRepository = new PushAssociationRepository();
