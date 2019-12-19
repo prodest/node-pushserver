@@ -1,9 +1,9 @@
-import * as apn from 'apn';
-import { Notification, Provider, ProviderOptions } from 'apn';
-import { AppConfig } from '../config';
-import { pushAssociationRepository } from '../repository';
+import * as apn from "apn";
+import { Notification, Provider, ProviderOptions } from "apn";
+import { AppConfig } from "../config";
+import { pushAssociationRepository } from "../repository";
 
-class APNSService {
+export class APNSService {
   public repository = pushAssociationRepository;
 
   private apnProvider: Provider;
@@ -31,12 +31,12 @@ class APNSService {
     this.apnProvider
       .send(note, registrationTokens)
       .then((response: any) => {
-        console.log('Successfully sent apns message:');
+        console.log("Successfully sent apns message:");
         console.log(JSON.stringify(response));
         return this.handleResults(response.failed);
       })
       .catch((error: any) => {
-        console.log('Error sending apns message:', error);
+        console.log("Error sending apns message:", error);
       });
   }
 
@@ -44,7 +44,7 @@ class APNSService {
     let tokensToDelete: any[] = [];
 
     failedTokens.forEach((result: any) => {
-      if (result.response.reason === 'BadDeviceToken') {
+      if (result.response.reason === "BadDeviceToken") {
         // TODO: Verificar se é necessário tratar outras mensagens de erro
         tokensToDelete.push(result.device);
       }
