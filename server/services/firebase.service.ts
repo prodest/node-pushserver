@@ -2,7 +2,7 @@ import * as admin from "firebase-admin";
 import { AppConfig } from "../config";
 import { pushAssociationRepository } from "../repository";
 
-export class FirebaseService {
+class FirebaseService {
   public repository = pushAssociationRepository;
 
   constructor() {
@@ -91,6 +91,6 @@ export class FirebaseService {
   }
 }
 
-// const firebaseService = new FirebaseService();
+export const firebaseService = new FirebaseService();
 
 // new FirebaseService();

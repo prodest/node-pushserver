@@ -3,7 +3,7 @@ import { Notification, Provider, ProviderOptions } from "apn";
 import { AppConfig } from "../config";
 import { pushAssociationRepository } from "../repository";
 
-export class APNSService {
+class APNSService {
   public repository = pushAssociationRepository;
 
   private apnProvider: Provider;
@@ -56,5 +56,5 @@ export class APNSService {
   }
 }
 
-// const apnsService = new APNSService();
-new APNSService();
+export const apnsService = new APNSService();
+//new APNSService();
