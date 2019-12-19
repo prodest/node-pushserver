@@ -1,33 +1,40 @@
-import * as admin from 'firebase-admin';
-import { AppConfig } from '../config';
-import { pushAssociationRepository } from '../repository';
+import * as admin from "firebase-admin";
+import { AppConfig } from "../config";
+import { pushAssociationRepository } from "../repository";
 
- class FirebaseService {
+export class FirebaseService {
   public repository = pushAssociationRepository;
 
   constructor() {
-    console.log('initializeApp Firebase');
+    console.log("initializeApp Firebase");
     admin.initializeApp({
       credential: admin.credential.cert(AppConfig.firebaseServiceAccount),
       databaseURL: AppConfig.firebaseDatabaseUrl
     });
   }
 
-  public push(registrationTokens: string[], payload: admin.messaging.MessagingPayload, ttl: number = 2419200) {
+  public push(
+    registrationTokens: string[],
+    payload: admin.messaging.MessagingPayload,
+    ttl: number = 2419200
+  ) {
     payload = this.parsePayload(payload);
 
     admin
       .messaging()
-      .sendToDevice(registrationTokens, payload, { priority: 'high', timeToLive: ttl })
+      .sendToDevice(registrationTokens, payload, {
+        priority: "high",
+        timeToLive: ttl
+      })
       .then((response: any) => {
         // See the MessagingDevicesResponse reference documentation for
         // the contents of response.
-        console.log('Successfully sent fcm message:');
+        console.log("Successfully sent fcm message:");
         console.log(JSON.stringify(response));
         return this.handleResults(registrationTokens, response.results);
       })
       .catch((error: any) => {
-        console.log('Error sending firebase message:', error);
+        console.log("Error sending firebase message:", error);
       });
   }
 
@@ -38,13 +45,16 @@ import { pushAssociationRepository } from '../repository';
     results.forEach((result: any, index: number) => {
       if (result.canonicalRegistrationToken) {
         // TODO: verificar como é feito isso no firebase
-        idsToUpdate.push({ from: registrationTokens[index], to: result.canonicalRegistrationToken });
+        idsToUpdate.push({
+          from: registrationTokens[index],
+          to: result.canonicalRegistrationToken
+        });
       } else if (result.error) {
         // TODO: Verificar se é necessário tratar outras mensagens de erro
         if (
-          result.error.code === 'messaging/registration-token-not-registered' ||
-          result.error.code === 'messaging/invalid-registration-token' ||
-          result.error.code === 'messaging/mismatched-credential'
+          result.error.code === "messaging/registration-token-not-registered" ||
+          result.error.code === "messaging/invalid-registration-token" ||
+          result.error.code === "messaging/mismatched-credential"
         ) {
           tokensToDelete.push(registrationTokens[index]);
         }
@@ -59,7 +69,9 @@ import { pushAssociationRepository } from '../repository';
     }
   }
 
-  private parsePayload(payload: admin.messaging.MessagingPayload): admin.messaging.MessagingPayload {
+  private parsePayload(
+    payload: admin.messaging.MessagingPayload
+  ): admin.messaging.MessagingPayload {
     if (payload.data) {
       payload.data = this.stringfyProperties(payload.data);
     }
@@ -71,7 +83,7 @@ import { pushAssociationRepository } from '../repository';
 
   private stringfyProperties(obj: any): any {
     Object.keys(obj).forEach(key => {
-      if (typeof obj[key] !== 'string') {
+      if (typeof obj[key] !== "string") {
         obj[key] = JSON.stringify(obj[key]);
       }
     });
@@ -81,4 +93,4 @@ import { pushAssociationRepository } from '../repository';
 
 // const firebaseService = new FirebaseService();
 
-new FirebaseService();
+// new FirebaseService();
