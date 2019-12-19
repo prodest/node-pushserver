@@ -1,12 +1,12 @@
 import * as _ from "lodash";
 import { pushAssociationRepository } from "../repository";
 import { IPushAssociation } from "../models";
-import { FirebaseService, APNSService } from "../services";
+import { firebaseService, apnsService } from "../services";
 
 export class PushService {
   private repository = pushAssociationRepository;
-  private firebaseService = new FirebaseService();
-  private apnsService = new APNSService();
+  private firebaseService = firebaseService;
+  private apnsService = apnsService;
 
   // Helpers
   public sendNotifications(notifs: any) {
